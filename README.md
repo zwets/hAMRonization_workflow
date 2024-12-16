@@ -35,12 +35,15 @@ Excluded tools:
 
 ## Installation 
 
-First clone this repository:
+Install prerequisites for building this pipeline (on Ubuntu):
+
+`sudo apt install build-essential git zlib1g-dev curl wget file unzip`
+
+Clone this repository:
 
 `git clone https://github.com/pha4ge/hAMRonization_workflow`
 
-This pipeline depends on snakemake, conda, build-essentials, git, zlib-dev, and unzip. 
-If you have conda installed, please run:
+Install conda, then run:
 
 `conda env create -n hamronization_workflow --file envs/hamronization_workflow.yaml` 
 
@@ -50,14 +53,16 @@ and
 
 All further dependencies will be installed via conda on execution.
 
-If you want to run `DeepARG` you need to have a working `singularity` install on your system and invoke `--use-singularity --singularity-args "-B $PWD:/data"` when running snakemake (otherwise comment out this input to the cleanup rule in the `Snakefile`).
+If you want to run `DeepARG` you need to have a working `singularity` install on your system (`sudo apt install singularity-container`), and invoke `--use-singularity --singularity-args "-B $PWD:/data"` when running snakemake.
 
 ## Running
 
 To execute the pipeline, navigate to the cloned repository, edit the config (`config/config.yaml`) and input details (`config/isolate_list.txt`) for your purposes.
-Execute the following substitution the value for `--jobs` as needed:
+Execute the following, substituting a value for `--jobs` as needed:
 
 `snakemake --configfile config/config.yaml --use-conda --conda-frontend mamba --jobs 2 --use-singularity --singularity-args "-B $PWD:/data"` 
+
+If you get the error _"libmamba: non-conda folder exists at prefix"_, omit `--conda-frontend mamba`.
 
 Testing
 -------
