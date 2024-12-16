@@ -8,10 +8,10 @@ samples = pd.read_table(config["samples"], index_col="biosample", sep="\t")
 samples.index = samples.index.astype('str', copy=False) # in case samples are integers, need to convert them to str
 
 def _get_seq(wildcards,seqs):
-    return samples.loc[(wildcards.sample), [seqs]].dropna()[0]
+    return samples.loc[(wildcards.sample), [seqs]].dropna().iloc[0]
 
 def _get_seqdir(wildcards):
-    return os.path.dirname(samples.loc[(wildcards.sample), ["assembly"]].dropna()[0])
+    return os.path.dirname(samples.loc[(wildcards.sample), ["assembly"]].dropna().iloc[0])
 
 def _get_deeparg():
 	results = []
