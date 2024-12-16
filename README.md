@@ -37,30 +37,34 @@ Excluded tools:
 
 Install prerequisites for building this pipeline (on Ubuntu):
 
-`sudo apt install build-essential git zlib1g-dev curl wget file unzip`
+    sudo apt install build-essential git zlib1g-dev curl wget file unzip
+
+You need Singularity if you want to run `DeepARG`:
+
+    sudo apt install singularity-container
 
 Clone this repository:
 
-`git clone https://github.com/pha4ge/hAMRonization_workflow`
+    git clone https://github.com/pha4ge/hAMRonization_workflow
 
 Install conda, then run:
 
-`conda env create -n hamronization_workflow --file envs/hamronization_workflow.yaml` 
+    conda env create -n hamronization_workflow --file envs/hamronization_workflow.yaml
 
 and 
 
-`conda activate hamronization_workflow`
+    conda activate hamronization_workflow
 
 All further dependencies will be installed via conda on execution.
 
-If you want to run `DeepARG` you need to have a working `singularity` install on your system (`sudo apt install singularity-container`), and invoke `--use-singularity --singularity-args "-B $PWD:/data"` when running snakemake.
+If you want to run `DeepARG` you need to invoke snakemake with `--use-singularity --singularity-args "-B $PWD:/data"`.
 
 ## Running
 
 To execute the pipeline, navigate to the cloned repository, edit the config (`config/config.yaml`) and input details (`config/isolate_list.txt`) for your purposes.
 Execute the following, substituting a value for `--jobs` as needed:
 
-`snakemake --configfile config/config.yaml --use-conda --conda-frontend mamba --jobs 2 --use-singularity --singularity-args "-B $PWD:/data"` 
+    snakemake --configfile config/config.yaml --use-conda --conda-frontend mamba --jobs 2 --use-singularity --singularity-args "-B $PWD:/data"
 
 If you get the error _"libmamba: non-conda folder exists at prefix"_, omit `--conda-frontend mamba`.
 
@@ -69,7 +73,7 @@ Testing
 
 To test the pipeline follow the above installation instructions and execute on the test data set:
 
-`snakemake --configfile config/test_config.yaml --use-conda --conda-frontend mamba --jobs 1 --use-singularity --singularity-args "-B $PWD:/data"`
+    snakemake --configfile config/test_config.yaml --use-conda --conda-frontend mamba --jobs 1 --use-singularity --singularity-args "-B $PWD:/data"
 
 Docker
 ------
@@ -82,15 +86,15 @@ If you are unable to run docker in privileged mode then you can just comment out
 
 First get the docker container:
 
-`docker pull finlaymaguire/hamronization:1.0.1`
+    docker pull finlaymaguire/hamronization:1.0.1
 
 You can execute it in a couple of ways but the easiest is to just mount the folder containing your reads and running it interactively:
 
-`docker run -it --privileged -v $HOST_FOLDER_CONTAINING_ISOLATES:/data finlaymaguire/hamronization:1.0.1 /bin/bash`
+    docker run -it --privileged -v $HOST_FOLDER_CONTAINING_ISOLATES:/data finlaymaguire/hamronization:1.0.1 /bin/bash
 
 If our isolate data is in `~/isolates` the command to interactively run this container and get a bash terminal would be:
 
-`docker run -it --privileged -v ~/isolates:/data finlaymaguire/hamronization:1.0.1 /bin/bash`
+    docker run -it --privileged -v ~/isolates:/data finlaymaguire/hamronization:1.0.1 /bin/bash
 
 Then point your `sample_table.tsv` to that folder, entries for this example would be:
 
@@ -102,11 +106,11 @@ Mycobacterium tuberculosis      SAMN02599009    /data/SAMN02599009/GCF_000662586
 
 Then specify your `config.yaml` to use this `sample_table.tsv` and execute the pipeline from bash in the container by activating the top-level environment:
 
-`conda activate hamronization_workflow`
+    conda activate hamronization_workflow
 
 Then the workflow:
 
-`snakemake --configfile config/config.yaml --use-conda --cores 6 --use-singularity --singularity-args "-B $PWD:/data"`
+    snakemake --configfile config/config.yaml --use-conda --cores 6 --use-singularity --singularity-args "-B $PWD:/data"
 
 *WARNING* You will have to extract your results folder (e.g. `cp results /data` for the example mounted volume) from the container if you wish to use them elsewhere.  
 

@@ -6,7 +6,7 @@ rule get_resfams_db:
        dateformat = config["params"]["dateformat"]
     shell:
        """
-       curl http://dantaslab.wustl.edu/resfams/Resfams-full.hmm.gz | gunzip > {output.resfams_hmms}
+       wget -O- http://dantaslab.wustl.edu/resfams/Resfams-full.hmm.gz | gunzip -c > {output.resfams_hmms}
        date +"{params.dateformat}" > {output.dbversion}
        """
 

@@ -57,5 +57,5 @@ rule hamronize_groot:
         db_dir = config["params"]["db_dir"]
     shell:
         """
-        hamronize groot --input_file_name {input.read1} $(paste - < {input.metadata}) --reference_database_id {params.db_source} --reference_database_version $(paste - < {params.db_dir}/groot_clustered/card.90/timestamp.txt) {input.report} > {output}
+        hamronize groot --input_file_name {input.read1} $(paste - < {input.metadata}) --reference_database_name {params.db_source} --reference_database_version $(paste - < {params.db_dir}/groot_clustered/card.90/timestamp.txt) {input.report} > {output}
         """
